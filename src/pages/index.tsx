@@ -12,7 +12,6 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main>
-        <h1>Route: /</h1>
         <Landing />
       </main>
     </>
