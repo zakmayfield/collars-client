@@ -33,17 +33,22 @@ export const Nav = () => {
   const { toggleColorMode } = useColorMode();
 
   return (
-    <Box as='nav' py='2'>
+    <Box as='nav' py='5'>
       <List display='flex' alignItems='center'>
-        {links.map((link) => {
+        {links.map((link, index) => {
           return (
-            <ListItem key={link.path} px='2' fontSize='lg'>
+            <ListItem
+              key={link.path}
+              fontSize='lg'
+              pr='3'
+              pl={index === 0 ? '0' : '3'}
+            >
               <Link href={link.path}>{link.page}</Link>
             </ListItem>
           );
         })}
 
-        <ListItem px='2' ml='auto'>
+        <ListItem ml='auto'>
           <Button onClick={toggleColorMode}>
             {useColorModeValue(<MdNightlightRound />, <MdWbSunny />)}
           </Button>
