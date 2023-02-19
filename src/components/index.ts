@@ -1,3 +1,5 @@
 export * from './Nav'
 export * from './Landing'
 export * from './LayoutOne'
+export * from './Dashboard'
+export * from './User'

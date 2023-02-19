@@ -1,8 +1,9 @@
-import Head from 'next/head'
+import Head from 'next/head';
 import { Landing } from '@/components';
+import { client } from '@/client';
+import { gql } from '@apollo/client';
 
-
-export default function Home() {
+export default function Home({ breeds }: { breeds: any[] }) {
   return (
     <>
       <Head>
@@ -16,4 +17,24 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const { data } = await client.query({
+    query: gql`
+      query GetBreeds {
+        getBreeds {
+          id
+          breed
+          species
+        }
+      }
+    `,
+  });
+
+  return {
+    props: {
+      breeds: data.getBreeds,
+    },
+  };
 }

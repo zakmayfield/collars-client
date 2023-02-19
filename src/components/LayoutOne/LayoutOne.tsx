@@ -4,7 +4,7 @@ import { Nav } from '../Nav';
 
 export const LayoutOne = ({ children }: PropsWithChildren) => {
   return (
-    <Box px='5'>
+    <Box>
         <Nav />
         {children}
     </Box>

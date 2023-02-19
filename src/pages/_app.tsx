@@ -1,4 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
+import { AuthProvider } from '@/auth';
 import { theme } from '@/styles/theme';
 import { LayoutOne } from '@/components';
 import type { AppProps } from 'next/app';
@@ -16,9 +17,11 @@ export default function App({ Component, pageProps }: AppProps) {
         }
       `}</style>
       <ChakraProvider theme={theme}>
-        <LayoutOne>
-          <Component {...pageProps} />
-        </LayoutOne>
+        <AuthProvider>
+          <LayoutOne>
+            <Component {...pageProps} />
+          </LayoutOne>
+        </AuthProvider>
       </ChakraProvider>
     </>
   );
