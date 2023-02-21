@@ -4,6 +4,7 @@ import { client } from '@/client';
 import { gql } from '@apollo/client';
 
 export default function Home({ breeds }: { breeds: any[] }) {
+  console.log('breeds', breeds)
   return (
     <>
       <Head>

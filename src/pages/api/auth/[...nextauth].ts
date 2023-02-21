@@ -20,6 +20,14 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET ?? '',
     }),
   ],
+
+  callbacks: {
+    async redirect({ url, baseUrl }: { url: string, baseUrl: string}) {
+      return baseUrl;
+    },
+  },
+
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 export default NextAuth(authOptions);

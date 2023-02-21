@@ -2,7 +2,7 @@ import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 
 const httpLink = new HttpLink({
-  uri: process.env.API_URL,
+  uri: 'http://localhost:4000/graphql',
   credentials: 'same-origin',
 });
 

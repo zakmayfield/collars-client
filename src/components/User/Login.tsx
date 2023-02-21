@@ -2,13 +2,15 @@ import { LoginArgs } from '@/types';
 import { useRouter } from 'next/router';
 import useLoginForm from '@/hooks/useLoginForm';
 import { useAuth } from '@/auth';
-import { Input, Button, Box, Flex, Center, Heading } from '@chakra-ui/react';
-import { getProviders, signIn } from 'next-auth/react';
+import { Input, Button, Box, Center, Heading, Text } from '@chakra-ui/react';
+import { signIn, useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export function Login() {
+  const { data: session, status } = useSession();
   const { login } = useAuth();
-
   const router = useRouter();
+
 
   const onSuccess = (data: LoginArgs) => {
     const { email, password } = data;
@@ -17,6 +19,8 @@ export function Login() {
       email,
       password,
     };
+
+    console.log('payload', payload)
 
     login(payload)
       .then((res) => {
@@ -66,26 +70,24 @@ export function Login() {
               />
 
               <Button type='submit' w='100%' my='4'>
-                Login
+                Log in with Email
               </Button>
-
-              {/* {error && error.message && <div>{error.message}</div>}
-      {data && data?.login?.user?.name && <div>✅ Hello, {name}</div>} */}
             </form>
+
+            <Text fontSize='sm' textAlign='center'>
+              Need to register?{' '}
+              <Link href='/sign-up'>
+                <Text as='span' opacity='.55'>
+                  Sign up here.
+                </Text>
+              </Link>
+            </Text>
           </Box>
         </Box>
 
-        <Box textAlign='center' w='375px'>
+        <Box textAlign='center' w='375px' mt='10' opacity='.75'>
           - OR -
         </Box>
-
-        {/* {providers.map((provider) => (
-          <div key={provider.name}>
-            <button onClick={() => signIn(provider.id)}>
-              Sign in with {provider.name}
-            </button>
-          </div>
-        ))} */}
 
         <Box w='375px'>
           <Button onClick={() => signIn()} w='100%' my='4'>
