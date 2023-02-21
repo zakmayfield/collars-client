@@ -21,7 +21,6 @@ export const Nav = () => {
   }
 
   let userSession = getUserSession();
-  console.log('session :::', userSession);
 
   return (
     <Box

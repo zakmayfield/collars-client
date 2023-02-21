@@ -1,15 +1,8 @@
-import {
-  ApolloClient,
-  ApolloLink,
-  ApolloProvider,
-  from,
-  HttpLink,
-  InMemoryCache,
-} from '@apollo/client';
+import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: process.env.API_URL,
   credentials: 'same-origin',
 });
 
@@ -23,7 +16,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 export const client = new ApolloClient({
-  // link: authMiddleware.concat(errorLink).concat(httpLink),
   link: from([errorLink, httpLink]),
   cache: new InMemoryCache(),
   name: 'collars-client-v3',
