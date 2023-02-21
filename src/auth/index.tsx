@@ -1,7 +1,5 @@
-import react from 'react';
 import {
   useState,
-  useEffect,
   useContext,
   createContext,
   PropsWithChildren,
@@ -18,8 +16,6 @@ import {
 import { onError } from '@apollo/client/link/error';
 import { LOGIN, SIGN_UP } from '@/schema';
 import { LoginArgs, AuthContext, SignUpArgs } from '@/types';
-import { setContext } from '@apollo/client/link/context';
-import useGetLocalStorage from '@/hooks/useGetLocalStorage';
 
 const authContext = createContext<AuthContext>(null!);
 
