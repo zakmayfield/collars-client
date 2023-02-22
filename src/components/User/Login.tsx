@@ -3,14 +3,11 @@ import { useRouter } from 'next/router';
 import useLoginForm from '@/hooks/useLoginForm';
 import { useAuth } from '@/auth';
 import { Input, Button, Box, Center, Heading, Text } from '@chakra-ui/react';
-import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 export function Login() {
-  const { data: session, status } = useSession();
   const { login } = useAuth();
   const router = useRouter();
-
 
   const onSuccess = (data: LoginArgs) => {
     const { email, password } = data;
@@ -20,12 +17,12 @@ export function Login() {
       password,
     };
 
-    console.log('payload', payload)
+    console.log('payload', payload);
 
     login(payload)
       .then((res) => {
         console.log('res', res);
-        router.push('/dashboard');
+        // router.push('/dashboard');
       })
       .catch((error) => {
         console.log(`::: 🚫/mutation/login :::`, error);
@@ -83,16 +80,6 @@ export function Login() {
               </Link>
             </Text>
           </Box>
-        </Box>
-
-        <Box textAlign='center' w='375px' mt='10' opacity='.75'>
-          - OR -
-        </Box>
-
-        <Box w='375px'>
-          <Button onClick={() => signIn()} w='100%' my='4'>
-            Sign in with Provider
-          </Button>
         </Box>
       </Box>
     </Center>
