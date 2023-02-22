@@ -3,6 +3,7 @@ import {
   useContext,
   createContext,
   PropsWithChildren,
+  useEffect,
 } from 'react';
 import {
   ApolloClient,
@@ -17,15 +18,25 @@ import { onError } from '@apollo/client/link/error';
 import { LOGIN, SIGN_UP } from '@/schema';
 import { LoginArgs, AuthContext, SignUpArgs } from '@/types';
 
+// this hook is used for using default values of initialAuthUser, when referencing this object outside of a useMemo it would cause our useEffect to trigger multiple re runs
+// this is because the useEffect is watching that object, which would have been updated as the state changed, causing another re render.
+
+// extrapolating this functionality to a useMemo hook of defining our initialAuthUser it will not cause multiple re renders
 const authContext = createContext<AuthContext>(null!);
 
 function useProvideAuth() {
   const [authToken, setAuthToken] = useState('');
+  const [isAuth, setIsAuth] = useState(false);
+
+  // authUser needs to be persisted we can either attach a user to the req header, if possible idk,
+  // or persist the user in localstorage
+  // both are low security options.
+  const [authUser, setAuthUser] = useState(null)
+
+  const secret = process.env.NEXTAUTH_SECRET ?? '';
 
   const authMiddleware = new ApolloLink((operation, forward) => {
     const token = window.localStorage.getItem('token');
-
-    console.log('::: token/authMiddleware :::', token);
 
     operation.setContext(({ headers = {} }) => ({
       headers: {
@@ -74,14 +85,14 @@ function useProvideAuth() {
     });
 
     if (data?.login?.token) {
-      let token: string = data.login.token;
+      const {token, user} = data.login
 
       setAuthToken(token);
+      setAuthUser(user)
+      
       window.localStorage.setItem('token', token);
 
       const { login } = data;
-
-      console.log(`::: direct client mutation/login :::`, login);
 
       return login;
     }
@@ -100,8 +111,6 @@ function useProvideAuth() {
       },
     });
 
-    console.log(`::: signUp :::`, data.signUp);
-
     if (data?.signUp?.token) {
       let token: string = data.signUp.token;
 
@@ -113,10 +122,60 @@ function useProvideAuth() {
     }
   }
 
+  // useEffect(() => {
+  //   // console.log('hitting isAuth hook');
+  //   // if (authToken) {
+  //   //   try {
+  //   //     console.log('try :: pre verify');
+  //   //     const verifiedToken = jwt.verify(authToken, secret);
+  //   //     console.log('verfied token', verifiedToken);
+  //   //   } catch (err) {
+  //   //     console.log('error ::: useAuth', err);
+  //   //   }
+
+  //   // if (!verifiedToken) {
+  //   //   localStorage.removeItem('token');
+  //   // }
+
+  //   // if (verifiedToken) {
+  //   //   console.log('verified token :::', verifiedToken);
+  //   //   setIsAuth(true);
+  //   // }
+
+  //   async function verifyToken() {
+  //     try {
+  //       let decoded;
+
+  //       if (authToken) {
+  //         console.log('authToken', authToken);
+
+  //         decoded = verify(
+  //           authToken,
+  //           secret,
+  //         );
+
+  //         console.log('decoded :::', decoded);
+
+  //         return decoded;
+  //       }
+  //     } catch (err) {
+  //       console.log('error', err);
+  //       return null;
+  //     }
+  //   }
+
+  //   if (authToken) {
+  //     verifyToken();
+  //   }
+
+  //   setIsAuth(false);
+  // }, [authToken, secret]);
+
   return {
     createApolloClient,
     login,
-    signUp
+    signUp,
+    authUser
   };
 }
 

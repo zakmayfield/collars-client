@@ -15,8 +15,16 @@ import { useColorMode } from '@chakra-ui/react';
 import { MdNightlightRound, MdWbSunny } from 'react-icons/md';
 import { FaArrowDown, FaHamburger } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import { useAuth } from '@/auth';
+import { useEffect } from 'react';
 
 export const Nav = () => {
+  const { authUser } = useAuth()
+
+  useEffect(() => {
+    console.log('isAuth ::: Nav.tsx :::', authUser)
+  }, [authUser])
+  
   const { toggleColorMode } = useColorMode();
 
   return (

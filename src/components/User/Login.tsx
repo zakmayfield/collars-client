@@ -17,11 +17,8 @@ export function Login() {
       password,
     };
 
-    console.log('payload', payload);
-
     login(payload)
       .then((res) => {
-        console.log('res', res);
         // router.push('/dashboard');
       })
       .catch((error) => {
