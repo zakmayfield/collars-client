@@ -18,8 +18,8 @@ export function Login() {
     };
 
     login(payload)
-      .then((res) => {
-        // router.push('/dashboard');
+      .then(() => {
+        router.push('/dashboard');
       })
       .catch((error) => {
         console.log(`::: 🚫/mutation/login :::`, error);

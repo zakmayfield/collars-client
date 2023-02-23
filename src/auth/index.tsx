@@ -18,21 +18,10 @@ import { onError } from '@apollo/client/link/error';
 import { LOGIN, SIGN_UP } from '@/schema';
 import { LoginArgs, AuthContext, SignUpArgs } from '@/types';
 
-// this hook is used for using default values of initialAuthUser, when referencing this object outside of a useMemo it would cause our useEffect to trigger multiple re runs
-// this is because the useEffect is watching that object, which would have been updated as the state changed, causing another re render.
-
-// extrapolating this functionality to a useMemo hook of defining our initialAuthUser it will not cause multiple re renders
 const authContext = createContext<AuthContext>(null!);
 
 function useProvideAuth() {
   const [authToken, setAuthToken] = useState('');
-  const [isAuth, setIsAuth] = useState(false);
-
-  // authUser needs to be persisted we can either attach a user to the req header, if possible idk,
-  // or persist the user in localstorage
-  // both are low security options.
-  const [authUser, setAuthUser] = useState(null)
-
   const secret = process.env.NEXTAUTH_SECRET ?? '';
 
   const authMiddleware = new ApolloLink((operation, forward) => {
@@ -51,7 +40,7 @@ function useProvideAuth() {
   function createApolloClient(): ApolloClient<NormalizedCacheObject> {
     const httpLink = new HttpLink({
       uri: 'http://localhost:4000/graphql',
-      credentials: 'same-origin',
+      credentials: 'include',
     });
 
     const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -85,14 +74,15 @@ function useProvideAuth() {
     });
 
     if (data?.login?.token) {
-      const {token, user} = data.login
+      const { token, user } = data.login;
 
       setAuthToken(token);
-      setAuthUser(user)
-      
+
       window.localStorage.setItem('token', token);
 
       const { login } = data;
+
+      console.log('login :::', login);
 
       return login;
     }
@@ -112,11 +102,13 @@ function useProvideAuth() {
     });
 
     if (data?.signUp?.token) {
-      let token: string = data.signUp.token;
+      const { token, user } = data.signUp;
 
       setAuthToken(token);
 
       const { signUp } = data;
+
+      console.log('signUp :::', signUp);
 
       return signUp;
     }
@@ -175,7 +167,6 @@ function useProvideAuth() {
     createApolloClient,
     login,
     signUp,
-    authUser
   };
 }
 

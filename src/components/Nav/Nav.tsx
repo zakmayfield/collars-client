@@ -15,17 +15,14 @@ import { useColorMode } from '@chakra-ui/react';
 import { MdNightlightRound, MdWbSunny } from 'react-icons/md';
 import { FaArrowDown, FaHamburger } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import { useAuth } from '@/auth';
-import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 export const Nav = () => {
-  const { authUser } = useAuth()
+  const router = useRouter();
 
-  useEffect(() => {
-    console.log('isAuth ::: Nav.tsx :::', authUser)
-  }, [authUser])
-  
   const { toggleColorMode } = useColorMode();
+
+  // this nav is only for development, i think the layout of my app will be sort of a portal vibe, no navigatable nav bar but each page is interactive with its own sort of navigation
 
   return (
     <Box
@@ -45,6 +42,19 @@ export const Nav = () => {
         </ListItem>
         <ListItem fontSize='lg' pr='3'>
           <Link href='/login'>Log In</Link>
+        </ListItem>
+        <ListItem>
+          <Button
+            onClick={() => {
+              window.localStorage.removeItem('token');
+              router.push('/');
+            }}
+          >
+            Log Out
+          </Button>
+        </ListItem>
+        <ListItem>
+          <Link href='/api/auth/logout'>Auth Log out</Link>
         </ListItem>
       </List>
     </Box>

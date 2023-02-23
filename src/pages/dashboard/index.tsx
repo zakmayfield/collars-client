@@ -1,7 +1,9 @@
 import { Dashboard } from '@/components';
+import { NextApiRequest } from 'next';
 import Head from 'next/head';
+import * as cookie from 'cookie';
 
-export default function DashboardPage() {
+export default function DashboardPage({ req }: { req: any }) {
   return (
     <>
       <Head>
@@ -15,4 +17,30 @@ export default function DashboardPage() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps(context: {
+  req: NextApiRequest;
+  res: any;
+}) {
+  const { req } = context;
+
+  const token = req.cookies;
+
+  console.log('token ______________________________________', token);
+
+  // if (!token) {
+  //   return {
+  //     redirect: {
+  //       destination: '/login',
+  //       permanent: false,
+  //     },
+  //   };
+  // }
+
+  return {
+    props: {
+      req: '',
+    },
+  };
 }

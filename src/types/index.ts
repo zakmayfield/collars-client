@@ -16,7 +16,6 @@ export type AuthContext = {
   login: ({ email, password }: LoginArgs) => Promise<AuthContextReturn>;
   signUp: ({ name, username, email, password }: SignUpArgs) => Promise<AuthContextReturn>;
   createApolloClient: () => ApolloClient<NormalizedCacheObject>;
-  authUser: User | null;
 };
 
 export type Auth = {

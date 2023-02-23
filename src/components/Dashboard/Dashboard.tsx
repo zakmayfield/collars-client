@@ -1,19 +1,11 @@
-import { useAuth } from '@/auth';
 import { GET_USER } from '@/schema';
 import { useQuery } from '@apollo/client';
 import { List, ListItem, Box } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 
 export function Dashboard() {
   const router = useRouter();
-  const { authUser } = useAuth();
-
-  useLayoutEffect(() => {
-    if (!authUser) {
-      router.push('/login');
-    }
-  }, [authUser, router]);
 
   const { data, loading, error } = useQuery(GET_USER);
 
